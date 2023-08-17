@@ -2,16 +2,18 @@
 async function fetchCarManufacturers() {
     try {
       const response = await fetch("https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json");
-     
 
       if (!response.ok) {
         console.error("Error: request failed", response.status);
         return;
       }  
+
       const carData = await response.json();
       console.log("All fetched cars", carData);
+
       const filteredManufacturers = carData.Results.filter(manufacturer => manufacturer.VehicleTypes.length >= 3);
         console.log("Filtered manufacturers", filteredManufacturers)
+
         const modifiedData = filteredManufacturers.map(manufacturer => ({
             country: manufacturer.Country,
             name: manufacturer.Mfr_CommonName,
@@ -19,6 +21,7 @@ async function fetchCarManufacturers() {
             amountVehicleTypes: manufacturer.VehicleTypes.length
           }));
           console.log("Modified data", modifiedData)
+
           displayTable(modifiedData);
 
     } catch (error) {
